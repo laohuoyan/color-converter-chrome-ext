@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
+import { Input, Typography, Color } from 'antd';
 import './Popup.css';
+
+const { Text } = Typography;
 
 // #FFF
 const REG_COLOR_HEX_3 = /^#([\d,a-f,A-F]{3})$/;
@@ -34,7 +37,8 @@ function isValidColor(source) {
 }
 
 function numToHex(num) {
-  return Number(num).toString(16);
+  const hex = Number(num).toString(16);
+  return hex.length < 2 ? `0${hex}` : hex;
 }
 
 function hex3Tohex6(str) {
@@ -54,6 +58,7 @@ function colorToHEX(str) {
   }
   if (isRGBColor(str)) {
     const matches = str.match(REG_COLOR_RGB);
+    console.log(matches);
     const [_, r, g, b] = matches;
     return `#${numToHex(r)}${numToHex(g)}${numToHex(b)}`;
   }
@@ -63,6 +68,7 @@ function colorToHEX(str) {
 function colorToRGB(str) {
   console.assert(isValidColor(str), 'invalid color');
 
+  str = removeAllWhitespace(str);
   if (isRGBColor(str)) {
     return str;
   }
@@ -83,8 +89,8 @@ const Popup = () => {
   const handleChange = (str) => {
     setSource(str);
 
-    if (isValidColor(str)) {
-      const noSpaceStr = removeAllWhitespace(str);
+    const noSpaceStr = removeAllWhitespace(str);
+    if (isValidColor(noSpaceStr)) {
       if (isHexColor(noSpaceStr)) {
         setTarget(colorToRGB(noSpaceStr));
       } else {
@@ -96,9 +102,23 @@ const Popup = () => {
   }
 
   return (
-    <div className="App">
-      <input value={source} onChange={e => handleChange(e.target.value)} />
-      {target}
+    <div className="app">
+      <Input
+        value={source}
+        onChange={e => handleChange(e.target.value)}
+        placeholder='输入色值，比如 #FFFFF、rgb(1,2,3)'
+      />
+      <div className="display">
+        {target && <Text copyable>{target}</Text>}
+      </div>
+
+      {
+        target &&
+        <div
+          className="colorBox"
+          style={{ background: target }}
+        ></div>
+      }
     </div>
   );
 };

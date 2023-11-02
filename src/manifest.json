@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "color converter",
-  "description": "color converter",
+  "name": "ColorConverter@BETA",
+  "description": "convert your color to RGB or Hex, THIS EXTENSION IS FOR BETA TESTING",
   "action": {
     "default_popup": "popup.html",
     "default_icon": "icon-34.png"
